@@ -7,7 +7,9 @@ import tkinter as tk
 PAYS = [
     'Finland',
     'Czech Republic',
-    'Togo'
+    'Togo',
+    'India',
+    'France'
 ]
 
 currentId = -1
@@ -49,6 +51,8 @@ def show(id: int):
         for widget in dataContainer.winfo_children():
             widget.destroy()
 
+        tk.Label(dataContainer, text=PAYS[id], font=("Arial", 14, "bold")).pack()
+
         # On récupère le drapeau du pays à l'aide du fichier drapeau.py.
         flag = drapeau.getFlag(PAYS[id])
 
@@ -56,12 +60,19 @@ def show(id: int):
         if flag is not None:
             label = tk.Label(dataContainer, image=flag)
             label.image = flag
-            label.pack()
+            label.pack(pady=20)
+
+        tk.Label(dataContainer, text=f"Capitale : {informations.capitale(PAYS[id])}").pack()
+        tk.Label(dataContainer, text=f"Espérance de vie : {informations.esperances(PAYS[id])} ans").pack()
+        tk.Label(dataContainer, text=f"Rang parmis son continent : {informations.classement(PAYS[id])}").pack()
+        cities = informations.trois_villes(PAYS[id])
+        tk.Label(dataContainer, text=f"Villes les plus peuplées du pays : {''.join([cities[i] + (', ' if i < len(cities) - 2 else (' et ' if i < len(cities) - 1 else '')) for i in range(len(cities))])}").pack()
 
 
 # On créer notre fenêtre tkinter et on lui donne un nom.
 root = tk.Tk()
 root.title("Informations des pays")
+root.resizable(False, False)
 
 # On créer une barre de boutons avec un bouton pour chaque pays à l'intérieur.
 buttonBar = tk.Frame(root)
